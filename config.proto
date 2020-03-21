@@ -1,0 +1,59 @@
+syntax = "proto3";
+package roughtime.config;
+
+// These protobufs are only used with JSON serialisation so we attempt to emit
+// as little C++ code as possible.
+option optimize_for = CODE_SIZE;
+
+// ServersJSON represents a JSON format for distributing information about
+// Roughtime servers.
+message ServersJSON {
+  // created contains the RFC3339 time when the JSON file was created.
+  string created = 1;
+  // expires contains the RFC3339 time when the information in this JSON file
+  // expires.
+  string expires = 2;
+  repeated Server servers = 3;
+}
+
+// Server represents a Roughtime server in a JSON configuration.
+message Server {
+  string name = 1;
+  // public_key_type specifies the type of the public key contained in
+  // |PublicKey|. Normally this will be "ed25519" but implementations should
+  // ignore entries with unknown key types.
+  string public_key_type = 2;
+  bytes public_key = 3;
+  repeated ServerAddress addresses = 4;
+}
+
+// ServerAddress represents the address of a Roughtime server in a JSON
+// configuration.
+message ServerAddress {
+  string protocol = 1;
+  // address contains a protocol specific address. For the protocol "udp", the
+  // address has the form "host:port" where host is either a DNS name, an IPv4
+  // literal, or an IPv6 literal in square brackets.
+  string address = 2;
+}
+
+// Chain represents a history of Roughtime queries where each provably follows
+// the previous one.
+message Chain {
+  repeated Link links = 1;
+}
+
+// Link represents an entry in a Chain.
+message Link {
+  // public_key_type specifies the type of public key contained in
+  // |PublicKey|. See the same field in |Server| for details.
+  string public_key_type = 1;
+  bytes server_public_key = 2;
+  // nonce_or_blind contains either the full nonce (only for the first |Link|
+  // in a |Chain|) or else contains a blind value that is combined with the
+  // previous reply to make the next nonce. In either case, the value is 64
+  // bytes long.
+  bytes nonce_or_blind = 3;
+  // reply contains the reply from the server.
+  bytes reply = 4;
+}

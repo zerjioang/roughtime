@@ -1,0 +1,17 @@
+{
+  "created": "2016-08-30T23:09:00Z",
+  "expires": "2017-03-01T00:00:00Z",
+  "servers": [
+    {
+      "name": "Google",
+      "publicKeyType": "ed25519",
+      "publicKey": "etPaaIxcBMY1oUeGpwvPMCJMwlRVNxv51KK/tktoJTQ=",
+      "addresses": [
+        {
+          "protocol": "udp",
+          "address": "roughtime.sandbox.google.com:2002"
+        }
+      ]
+    }
+  ]
+}
